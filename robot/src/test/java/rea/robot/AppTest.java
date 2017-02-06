@@ -63,8 +63,9 @@ public class AppTest  extends TestCase
         robot.run("left");
         robot.run("MOVE");
         robot.run("REPORT");
-        assertEquals(robot.getReport(), "0,1,NORTH");
+        assertEquals(robot.getReport(), "3,3,NORTH");
     }
+    
     /**
      * testRobot_Normal_Move
      */
@@ -79,5 +80,32 @@ public class AppTest  extends TestCase
         robot.run("MOVE");
         robot.run("REPORT");
         assertEquals(robot.getReport(), "1,5,NORTH");
+    }
+    /**
+     * testRobot_ABNormal_Place
+     */
+    public void testRobot_ABNormal_Place()
+    {
+        Robot robot = new Robot();
+        robot.run("PLACE 10,1,NORTH");
+        robot.run("MOVE");
+        robot.run("MOVE");
+        robot.run("MOVE");
+        robot.run("REPORT");
+        assertEquals(robot.getReport(), "5,4,NORTH");
+    }
+    
+    /**
+     * testRobot_ABNormal_Place
+     */
+    public void testRobot_ABNormal_Input()
+    {
+        Robot robot = new Robot();
+        robot.run("PLACED 10,1,NORTH");
+        robot.run("MOVE");
+        robot.run("MOVE");
+        robot.run("MOVE");
+        robot.run("REPORT");
+        assertEquals(robot.getReport(), "0,3,NORTH");
     }
 }

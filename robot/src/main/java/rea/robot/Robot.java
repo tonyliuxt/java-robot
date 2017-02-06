@@ -56,23 +56,26 @@ public class Robot {
 				return;
 			}
 			
-			if(Actions.valueOf(tempCommand[0]) == Actions.PLACE){
-				String furtherCmd[] = tempCommand[1].split(SPLIT);
-				if(furtherCmd.length != 3){
+			try{
+				// Exception catch when Integer/Directions/Actions converting error
+				if(Actions.valueOf(tempCommand[0]) == Actions.PLACE){
+					String furtherCmd[] = tempCommand[1].split(SPLIT);
+					if(furtherCmd.length != 3){
+						writeLog(ERROR);
+						return;
+					}else{
+						actionPlace(Integer.parseInt(furtherCmd[0]), Integer.parseInt(furtherCmd[1]), Directions.valueOf(furtherCmd[2]));
+					}
+				}else{
+					// Automatically initialize
+					initRobot(MAXX, MINX, MAXY, MINY, Directions.NORTH, 0, 0);
 					writeLog(ERROR);
 					return;
-				}else{
-					try{
-						// Exception catch when Integer/Directions converting error
-						actionPlace(Integer.parseInt(furtherCmd[0]), Integer.parseInt(furtherCmd[1]), Directions.valueOf(furtherCmd[2]));
-					}catch(Exception ex){
-						writeLog(ERROR);
-						ex.printStackTrace();
-						return;
-					}
 				}
-			}else{
+			}catch(Exception ex){
 				writeLog(ERROR);
+				ex.printStackTrace();
+				return;
 			}
 		}
 		// Other single action commands
@@ -134,6 +137,11 @@ public class Robot {
 	 * Place robot
 	 */
 	private void actionPlace(int x, int y, Directions d){
+		// protect place command 
+		x = x>MAXX ? MAXX:x;
+		y = y>MAXY ? MAXY:y;
+		d = d==null? Directions.NORTH:d; 
+		
 		initRobot(MAXX, MINX, MAXY, MINY, d, x, y);
 	}
 	
@@ -224,7 +232,7 @@ public class Robot {
 	
 	/**
 	 * Report current location
-	 * @return 
+	 * @return report [testable]
 	 */
 	private void actionReport(){
 		StringBuilder reportstr = new StringBuilder();
@@ -243,6 +251,6 @@ public class Robot {
 	 * Output related message when necessary
 	 */
 	private void writeLog(String s){
-		System.out.print(s);
+		System.out.println(s);
 	}
 }
