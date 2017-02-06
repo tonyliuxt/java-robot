@@ -36,11 +36,17 @@ public class Robot {
 	private static int MAXY = 5;
 	private static int MINY = 0;
 	
+	public Robot(){
+		// self initialize
+		initRobot(MAXX, MINX, MAXY, MINY, Directions.NORTH, 0, 0);
+	}
+	
 	/**
 	 * run any input commands
 	 * @param command
 	 */
 	public void run(String command){
+		
 		if(command == null || command.trim().length() == 0){
 			writeLog(ERROR);
 			return;
@@ -62,20 +68,15 @@ public class Robot {
 					String furtherCmd[] = tempCommand[1].split(SPLIT);
 					if(furtherCmd.length != 3){
 						writeLog(ERROR);
-						return;
 					}else{
 						actionPlace(Integer.parseInt(furtherCmd[0]), Integer.parseInt(furtherCmd[1]), Directions.valueOf(furtherCmd[2]));
 					}
 				}else{
-					// Automatically initialize
-					initRobot(MAXX, MINX, MAXY, MINY, Directions.NORTH, 0, 0);
 					writeLog(ERROR);
-					return;
 				}
 			}catch(Exception ex){
 				writeLog(ERROR);
 				ex.printStackTrace();
-				return;
 			}
 		}
 		// Other single action commands
@@ -127,26 +128,22 @@ public class Robot {
 		this.minX = minX;
 		this.minY = minY;
 		
-		this.currentD = d;
-		
-		this.currentX = currentX;
-		this.currentY = currentY;
+		// protect place command 
+		this.currentD = d==null? Directions.NORTH:d;
+		this.currentX = currentX>MAXX ? MAXX:currentX;
+		this.currentY = currentY>MAXY ? MAXY:currentY;
 	}
 	
 	/**
 	 * Place robot
 	 */
 	private void actionPlace(int x, int y, Directions d){
-		// protect place command 
-		x = x>MAXX ? MAXX:x;
-		y = y>MAXY ? MAXY:y;
-		d = d==null? Directions.NORTH:d; 
-		
 		initRobot(MAXX, MINX, MAXY, MINY, d, x, y);
 	}
 	
 	/**
 	 * Turn left
+	 * The origin (0,0) can be considered to be the SOUTH WEST most corner.
 	 */
 	private void actionLeft(){
 		switch(currentD){
@@ -170,6 +167,7 @@ public class Robot {
 	
 	/**
 	 * Turn right
+	 * The origin (0,0) can be considered to be the SOUTH WEST most corner.
 	 */
 	private void actionRight(){
 		switch(currentD){

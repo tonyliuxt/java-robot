@@ -108,4 +108,18 @@ public class AppTest  extends TestCase
         robot.run("REPORT");
         assertEquals(robot.getReport(), "0,3,NORTH");
     }
+    
+    /**
+     * testRobot_ABNormal_Place
+     */
+    public void testRobot_ABNormal_Input2()
+    {
+        Robot robot = new Robot();
+        robot.run("PLACE 1,1,SOUTH");
+        robot.run("MOVED");
+        robot.run("MOV E");
+        robot.run(" MOVE");
+        robot.run("REPORT");
+        assertEquals(robot.getReport(), "1,0,SOUTH");
+    }
 }
