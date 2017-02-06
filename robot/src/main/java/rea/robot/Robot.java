@@ -26,16 +26,81 @@ public class Robot {
 	private int currentY;
 	private Directions currentD;
 	
-	private String report;
-	
 	private static final String SPLIT = ",";
 	private static final String ERROR = "Error input, ignored and continue...";
 	
+	private static int MAXX = 5;
+	private static int MINX = 0;
+	
+	private static int MAXY = 5;
+	private static int MINY = 0;
+	
 	/**
 	 * run any input commands
-	 * @param commands
+	 * @param command
 	 */
-	private void run(String command){
+	public void run(String command){
+		if(command == null || command.trim().length() == 0){
+			writeLog(ERROR);
+			return;
+		}
+		
+		// PLACE command
+		if(command.contains(" ")){
+			String tempCommand[] = command.split(" ");
+			if(tempCommand.length != 2){
+				writeLog(ERROR);
+				return;
+			}
+			
+			if(Actions.valueOf(tempCommand[0]) == Actions.PLACE){
+				String furtherCmd[] = tempCommand[1].split(SPLIT);
+				if(furtherCmd.length != 3){
+					writeLog(ERROR);
+					return;
+				}else{
+					try{
+						// Exception catch when Integer/Directions converting error
+						actionPlace(Integer.parseInt(furtherCmd[0]), Integer.parseInt(furtherCmd[1]), Directions.valueOf(furtherCmd[2]));
+					}catch(Exception ex){
+						writeLog(ERROR);
+						ex.printStackTrace();
+						return;
+					}
+				}
+			}else{
+				writeLog(ERROR);
+			}
+		}
+		// Other single action commands
+		else{
+			
+			try{
+				// Exception catch when actions converting error
+				Actions action = Actions.valueOf(command);
+				switch(action){
+				case LEFT:
+					actionLeft();
+					break;
+				case RIGHT:
+					actionRight();
+					break;
+				case MOVE:
+					actionMove();
+					break;
+				case REPORT:
+					actionReport();
+					break;
+				default:
+					writeLog(ERROR);
+					break;
+				}
+			}catch(Exception ex){
+				writeLog(ERROR);
+				ex.printStackTrace();
+				return;
+			}
+		}
 		
 	}
 	
@@ -60,6 +125,13 @@ public class Robot {
 		
 		this.currentX = currentX;
 		this.currentY = currentY;
+	}
+	
+	/**
+	 * Place robot
+	 */
+	private void actionPlace(int x, int y, Directions d){
+		initRobot(MAXX, MINX, MAXY, MINY, d, x, y);
 	}
 	
 	/**
@@ -151,13 +223,13 @@ public class Robot {
 	 * Report current location
 	 * @return 
 	 */
-	private String actionReport(){
+	private void actionReport(){
 		StringBuilder report = new StringBuilder();
 		report.append(String.valueOf(currentX)).append(SPLIT)
 			  .append(String.valueOf(currentY)).append(SPLIT)
 			  .append(String.valueOf(currentD));
 		
-		return report.toString();
+		writeLog(report.toString());
 	}
 	
 	/**
@@ -166,4 +238,5 @@ public class Robot {
 	private void writeLog(String s){
 		System.out.print(s);
 	}
+	
 }

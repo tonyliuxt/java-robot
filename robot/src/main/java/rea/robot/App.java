@@ -6,8 +6,10 @@ package rea.robot;
  */
 public class App 
 {
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+	public static void main(String args[]){
+        Robot robot = new Robot();
+        robot.run("PLACE 0,0,NORTH");
+        robot.run("MOVE");
+        robot.run("REPORT");
     }
 }
