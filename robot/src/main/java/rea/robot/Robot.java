@@ -25,6 +25,7 @@ public class Robot {
 	private int currentX;
 	private int currentY;
 	private Directions currentD;
+	private String report;
 	
 	private static final String SPLIT = ",";
 	private static final String ERROR = "Error input, ignored and continue...";
@@ -44,6 +45,8 @@ public class Robot {
 			writeLog(ERROR);
 			return;
 		}
+		// avoid common input errors
+		command = command.toUpperCase().trim();
 		
 		// PLACE command
 		if(command.contains(" ")){
@@ -224,12 +227,16 @@ public class Robot {
 	 * @return 
 	 */
 	private void actionReport(){
-		StringBuilder report = new StringBuilder();
-		report.append(String.valueOf(currentX)).append(SPLIT)
+		StringBuilder reportstr = new StringBuilder();
+		reportstr.append(String.valueOf(currentX)).append(SPLIT)
 			  .append(String.valueOf(currentY)).append(SPLIT)
 			  .append(String.valueOf(currentD));
-		
-		writeLog(report.toString());
+		report = reportstr.toString();
+		writeLog(report);
+	}
+	
+	public String getReport(){
+		return report;
 	}
 	
 	/**
@@ -238,5 +245,4 @@ public class Robot {
 	private void writeLog(String s){
 		System.out.print(s);
 	}
-	
 }
